@@ -33,4 +33,4 @@ async def on_member_join(member):
     await member.add_roles(role)
     print(f"Ga {member.name} rollen {role.name}")
 
-client.run("MTQ0NDIyODQwODY5MDIxNzA4Mw.G8AS85.Rz5jSwTPlz0KgrxTY-z0Nwl0uNos-6GNTta5Yw")
+client.run(os.getenv("DISCORD_TOKEN"))
