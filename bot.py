@@ -1,12 +1,14 @@
 import discord
 import random
+import os
 
+# Intents behövs för att se när nya medlemmar joinar
 intents = discord.Intents.default()
 intents.members = True
 
 client = discord.Client(intents=intents)
 
-# Lägg in dina roll-ID:n här
+# Lägg in dina roll-ID:n här (från din server)
 RANDOM_ROLES = [
     1444234538313187338,
     1444234627966304377,
@@ -21,16 +23,21 @@ RANDOM_ROLES = [
 
 @client.event
 async def on_ready():
-    print(f"The Bot {client.user} Is Online!")
+    print(f"Botten {client.user} är online!")
 
 @client.event
 async def on_member_join(member):
-    # Välj en slumpmässig roll
-    role_id = random.choice(RANDOM_ROLES)
-    role = member.guild.get_role(role_id)
+    try:
+        # Välj slumpmässig roll
+        role_id = random.choice(RANDOM_ROLES)
+        role = member.guild.get_role(role_id)
+        if role:
+            await member.add_roles(role)
+            print(f"Ga {member.name} rollen {role.name}")
+        else:
+            print(f"Role {role_id} hittades inte!")
+    except Exception as e:
+        print(f"Fel vid on_member_join: {e}")
 
-    # Ge rollen
-    await member.add_roles(role)
-    print(f"Ga {member.name} rollen {role.name}")
-
+# Kör boten med token från environment variable
 client.run(os.getenv("DISCORD_TOKEN"))
